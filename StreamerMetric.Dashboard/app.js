@@ -72,6 +72,16 @@ async function loadFollowedChannels() {
     const status = await response.json();
     const accountStatus = await accountResponse.json();
     updateTwitchConnectionUi(accountStatus.connected);
+    if (!accountStatus.connected) {
+        document.getElementById("followed-count").textContent = "0";
+        document.getElementById("followed-live-count").textContent = "0";
+        document.getElementById("followed-tracking-count").textContent = "0";
+        document.getElementById("followed-waiting-count").textContent = "0";
+        const container = document.getElementById("followed-channels");
+        container.replaceChildren();
+        container.textContent = "Connect Twitch to load followed channels.";
+        return;
+    }
     document.getElementById("followed-count").textContent =
         status.followedChannels.toLocaleString();
     document.getElementById("followed-live-count").textContent =
@@ -91,20 +101,6 @@ async function loadFollowedChannels() {
     if (liveChannels.length === 0) {
         container.textContent = "No followed channels are currently live.";
         return;
-    }
-
-    function updateTwitchConnectionUi(connected) {
-        const button = document.getElementById("connect-twitch");
-        const status = document.getElementById("twitch-connection-status");
-        const syncStatus = document.getElementById("followed-sync-status");
-
-        button.textContent = connected ? "Connected" : "Connect Twitch";
-        button.disabled = connected;
-        button.classList.toggle("connected", connected);
-        status.textContent = connected ? "Twitch user connected" : "";
-        syncStatus.textContent = connected
-            ? "Followed channels are synchronized."
-            : "Connect Twitch to monitor followed channels.";
     }
 
     liveChannels.forEach(channel => {
@@ -134,6 +130,22 @@ async function loadFollowedChannels() {
         });
         container.appendChild(button);
     });
+}
+
+function updateTwitchConnectionUi(connected) {
+    const connectButton = document.getElementById("connect-twitch");
+    const disconnectButton = document.getElementById("disconnect-twitch");
+    const status = document.getElementById("twitch-connection-status");
+    const syncStatus = document.getElementById("followed-sync-status");
+
+    connectButton.textContent = connected ? "Connected" : "Connect Twitch";
+    connectButton.disabled = connected;
+    connectButton.classList.toggle("connected", connected);
+    disconnectButton.hidden = !connected;
+    status.textContent = connected ? "Twitch user connected" : "";
+    syncStatus.textContent = connected
+        ? "Followed channels are synchronized."
+        : "Connect Twitch to monitor followed channels.";
 }
 
 async function loadStreamHistory() {
@@ -383,6 +395,7 @@ const streamerForm = document.getElementById("streamer-form");
 const streamerError = document.getElementById("streamer-error");
 const streamSelector = document.getElementById("stream-selector");
 const connectTwitchButton = document.getElementById("connect-twitch");
+const disconnectTwitchButton = document.getElementById("disconnect-twitch");
 
 const oauthParams = new URLSearchParams(window.location.search);
 const oauthStatus = oauthParams.get("oauth");
@@ -412,6 +425,28 @@ connectTwitchButton.addEventListener("click", async () => {
     }
 
     window.location.href = result.authorizationUrl;
+});
+
+disconnectTwitchButton.addEventListener("click", async () => {
+    disconnectTwitchButton.disabled = true;
+
+    try {
+        const response = await fetch(
+            `${API_ROOT_URL}/account/disconnect`,
+            { method: "POST" }
+        );
+
+        if (!response.ok) {
+            throw new Error("Twitch account could not be disconnected.");
+        }
+
+        updateTwitchConnectionUi(false);
+        await loadFollowedChannels();
+    } catch (error) {
+        streamerError.textContent = error.message;
+    } finally {
+        disconnectTwitchButton.disabled = false;
+    }
 });
 
 streamSelector.addEventListener("change", async event => {

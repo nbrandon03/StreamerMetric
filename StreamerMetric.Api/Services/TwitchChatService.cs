@@ -67,6 +67,18 @@ public sealed class TwitchChatService
         }
     }
 
+    public void StopAllConnections()
+    {
+        string[] broadcasterIds;
+        lock (_connectionLock)
+        {
+            broadcasterIds = _broadcasterIds.ToArray();
+        }
+
+        foreach (var broadcasterId in broadcasterIds)
+            StopConnection(broadcasterId);
+    }
+
     public bool TryStartConnection(string broadcasterId, int? maximumConnections)
     {
         if (string.IsNullOrWhiteSpace(broadcasterId))

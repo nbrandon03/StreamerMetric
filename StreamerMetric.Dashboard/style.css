@@ -89,6 +89,21 @@
     border-color: var(--accent);
 }
 
+.twitch-account-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.secondary-button.disconnect {
+    border-color: rgba(248, 113, 113, 0.55);
+    color: #fca5a5;
+}
+
+.secondary-button.disconnect:hover {
+    border-color: #f87171;
+}
+
 * {
     box-sizing: border-box;
 }

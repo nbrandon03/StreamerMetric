@@ -69,9 +69,14 @@
                     <h2>Followed channels</h2>
                     <p id="followed-sync-status">Connect Twitch to monitor followed channels.</p>
                 </div>
-                <button id="connect-twitch" class="secondary-button" type="button">
-                    Connect Twitch
-                </button>
+                <div class="twitch-account-actions">
+                    <button id="connect-twitch" class="secondary-button" type="button">
+                        Connect Twitch
+                    </button>
+                    <button id="disconnect-twitch" class="secondary-button disconnect" type="button" hidden>
+                        Disconnect Twitch
+                    </button>
+                </div>
             </div>
             <div class="followed-summary">
                 <span>Followed: <strong id="followed-count">0</strong></span>

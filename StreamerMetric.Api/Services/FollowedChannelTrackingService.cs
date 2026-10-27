@@ -187,6 +187,11 @@ public sealed class FollowedChannelTrackingService : BackgroundService
         };
     }
 
+    public void ClearStatus()
+    {
+        _states.Clear();
+    }
+
     private async Task<string> GetAppAccessTokenAsync(
         CancellationToken cancellationToken)
     {

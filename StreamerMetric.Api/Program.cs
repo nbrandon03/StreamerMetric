@@ -531,8 +531,12 @@ app.MapPost("/api/twitch/account/sync", async (
 
 app.MapPost("/api/twitch/account/disconnect", async (
     TwitchFollowedChannelService accountService,
+    FollowedChannelTrackingService trackingService,
+    TwitchChatService chatService,
     CancellationToken cancellationToken) =>
 {
+    chatService.StopAllConnections();
+    trackingService.ClearStatus();
     await accountService.DisconnectAsync(cancellationToken);
     return Results.Ok(new { message = "Twitch account disconnected." });
 });
