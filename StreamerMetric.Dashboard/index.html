@@ -1,0 +1,151 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StreamerMetric | Twitch Analytics</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="topbar">
+        <a class="brand" href="#">
+            <span class="brand-icon">S</span>
+            <span>StreamerMetric</span>
+        </a>
+
+        <div class="header-status">
+            <span class="status-dot"></span>
+            Analytics Dashboard
+        </div>
+    </header>
+
+    <main class="dashboard">
+        <section class="page-heading">
+            <div>
+                <p class="eyebrow">TWITCH ANALYTICS</p>
+                <h1>Stream Overview</h1>
+                <p class="subtitle">
+                    Track chat activity, community engagement, and emote usage.
+                </p>
+            </div>
+
+            <div class="streamer-card">
+                <img
+                    id="streamer-avatar"
+                    class="streamer-avatar"
+                    src=""
+                    alt="Tracking channel profile picture">
+                <div>
+                    <p class="streamer-label">TRACKING CHANNEL</p>
+                    <form id="streamer-form" class="streamer-form">
+                        <label class="sr-only" for="streamer-username">
+                            Twitch username
+                        </label>
+                        <input
+                            id="streamer-username"
+                            name="streamer"
+                            type="text"
+                            placeholder="Twitch username"
+                            autocomplete="off"
+                            required>
+                        <button type="submit">Load</button>
+                    </form>
+                    <p id="streamer-error" class="streamer-error" role="alert"></p>
+                    <p id="twitch-connection-status" class="twitch-connection-status"></p>
+                    <label class="stream-selector-label" for="stream-selector">
+                        Broadcast history
+                    </label>
+                    <select id="stream-selector" class="stream-selector" disabled>
+                        <option value="">All collected broadcasts</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <section class="followed-panel panel">
+            <div class="panel-heading">
+                <div>
+                    <h2>Followed channels</h2>
+                    <p id="followed-sync-status">Connect Twitch to monitor followed channels.</p>
+                </div>
+                <button id="connect-twitch" class="secondary-button" type="button">
+                    Connect Twitch
+                </button>
+            </div>
+            <div class="followed-summary">
+                <span>Followed: <strong id="followed-count">0</strong></span>
+                <span>Live: <strong id="followed-live-count">0</strong></span>
+                <span>Tracking: <strong id="followed-tracking-count">0</strong></span>
+                <span>Waiting: <strong id="followed-waiting-count">0</strong></span>
+            </div>
+            <div id="followed-channels" class="followed-channels empty-state">
+                No followed channels loaded.
+            </div>
+        </section>
+
+        <section class="stats-grid">
+            <article class="stat-card">
+                <p class="stat-label">Total Messages</p>
+                <h2 id="total-messages">--</h2>
+                <p class="stat-description">Collected chat messages</p>
+            </article>
+
+            <article class="stat-card">
+                <p class="stat-label">Unique Chatters</p>
+                <h2 id="unique-chatters">--</h2>
+                <p class="stat-description">Distinct participants</p>
+            </article>
+
+            <article class="stat-card">
+                <p class="stat-label">Unique Emotes</p>
+                <h2 id="unique-emotes">--</h2>
+                <p class="stat-description">Different emotes used</p>
+            </article>
+
+            <article class="stat-card">
+                <p class="stat-label">Messages Per Minute</p>
+                <h2 id="messages-per-minute">--</h2>
+                <p class="stat-description">Latest recorded minute</p>
+            </article>
+        </section>
+
+        <section class="content-grid">
+            <article class="panel activity-panel">
+                <div class="panel-heading">
+                    <div>
+                        <h2>Chat Activity</h2>
+                        <p>Messages and unique chatters over time</p>
+                    </div>
+                    <span class="panel-tag">ACTIVITY</span>
+                </div>
+
+                <div class="chart-placeholder">
+                    <canvas id="activity-chart"></canvas>
+                </div>
+            </article>
+
+            <article class="panel emote-panel">
+                <div class="panel-heading">
+                    <div>
+                        <h2>Emote Usage</h2>
+                        <p>Most frequently used emotes</p>
+                    </div>
+                    <span class="panel-tag">EMOTES</span>
+                </div>
+
+                <div id="emote-leaderboard" class="empty-state">
+                    Your emote leaderboard will appear here.
+                </div>
+            </article>
+        </section>
+
+        <footer class="dashboard-footer">
+            <span>StreamerMetric</span>
+            <span>Community analytics for Twitch</span>
+        </footer>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
